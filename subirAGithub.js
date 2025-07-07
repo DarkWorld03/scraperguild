@@ -1,6 +1,5 @@
-const { Octokit } = require("@octokit/rest");
-
 async function subirAGithub({ repo, path, content, message, token }) {
+  const { Octokit } = await import("@octokit/rest");
   const octokit = new Octokit({ auth: token });
 
   const [owner, repoName] = repo.split("/");
@@ -12,13 +11,12 @@ async function subirAGithub({ repo, path, content, message, token }) {
       repo: repoName,
       path,
     });
-    sha = data.sha; // Ya existe, se va a actualizar
+    sha = data.sha;
   } catch (err) {
     if (err.status !== 404) {
-      console.error("❌ Error buscando archivo existente:", err);
+      console.error("❌ Error buscando archivo:", err);
       throw err;
     }
-    // Archivo no existe, lo va a crear nuevo
   }
 
   const resultado = await octokit.repos.createOrUpdateFileContents({
@@ -27,7 +25,7 @@ async function subirAGithub({ repo, path, content, message, token }) {
     path,
     message,
     content: Buffer.from(content).toString("base64"),
-    sha, // si es undefined, crea el archivo
+    sha,
   });
 
   return resultado;
