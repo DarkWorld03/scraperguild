@@ -13,13 +13,14 @@ app.get("/ejecutar-scraper", async (req, res) => {
     const content = JSON.stringify(data, null, 2);
 
     const subida = await subirAGithub({
-      repo: "darkworldaxie/guild-data",
+      repo: "DarkWorld03/guild-data",   // Cambiado al repo correcto
       path: `guild/${filename}`,
       content,
       message: "📦 Actualización automática de guild1.json",
       token: process.env.GITHUB_TOKEN,
     });
 
+    console.log("✅ Archivo subido:", subida);
     res.send("✅ JSON generado y subido a GitHub");
   } catch (err) {
     console.error("❌ Error al ejecutar todo:", err);
@@ -29,4 +30,5 @@ app.get("/ejecutar-scraper", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Servidor activo en puerto ${PORT}`));
+
 
